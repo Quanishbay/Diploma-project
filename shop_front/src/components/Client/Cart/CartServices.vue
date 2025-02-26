@@ -85,13 +85,15 @@ export default {
     <tr v-for="item in cartItems" :key="item.id">
       <td class="px-4 py-2 border">{{ item.service.name }}</td>
       <td class="px-4 py-2 border">{{ item.status }}</td>
-      <input v-model.number="item.quantity" type="number" class="px-4 py-2 border" min="1" @click="updateCart(item)">
-
+      <td class="px-4 py-2 border">
+        <input v-model.number="item.quantity" type="number" class="px-4 py-2 border" min="1" @click="updateCart(item)">
+      </td>
       <td class="px-4 py-2 border">{{ item.total }}</td>
       <td class="px-4 py-2 border">
         <button @click="deleteCart(item.id)" class="bg-red-500 text-white py-1 px-3 rounded">Delete</button>
       </td>
     </tr>
+
     </tbody>
   </table>
   <button @click="submitCart(cartItems)">Submit</button>

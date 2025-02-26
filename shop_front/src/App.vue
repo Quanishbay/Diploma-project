@@ -12,75 +12,87 @@
       <div class="flex space-x-6">
         <router-link v-if="!isAuthenticated" to="/login" class="nav-link">Login</router-link>
         <router-link v-if="!isAuthenticated" to="/register" class="nav-link">Register</router-link>
-        <button v-if="isAuthenticated" @click="logout" class="nav-link">Logout</button>
         <router-link v-if="isAuthenticated" to="/cart" class="nav-link">Cart</router-link>
         <router-link v-if="isAdmin" to="/edit/categories" class="nav-link">Edit Categories</router-link>
         <router-link v-if="isAuthenticated" to="/categories" class="nav-link">Categories</router-link>
-        <button v-if="userData" @click="profilePage(userData.id)">{{ userData.name}}</button>
-
+        <button v-if="isAuthenticated" @click="logout" class="nav-link">Logout</button>
+        <button v-if="userData" @click="profilePage(userData.id)" class="nav-link">
+          {{ userData.name }}
+        </button>
       </div>
     </nav>
-
     <router-view></router-view>
-
   </div>
+
+  <AboutUs></AboutUs>
+
 </template>
 
 <script>
 import axios from "axios";
+import AboutUs from "@/components/Navigation/AboutUs.vue";
 
 export default {
+  components:{
+    AboutUs
+  },
   data() {
     return {
-      isAdmin: localStorage.getItem('role') === 'admin',
-      cartItems: null,
-      token: localStorage.getItem('access_token'),
-      open: false,
       userData: null
-
-    }
+    };
   },
   computed: {
     isAuthenticated() {
-      return !!this.token
+      return !!localStorage.getItem("access_token");
+    },
+    isAdmin() {
+      return localStorage.getItem("role") === "admin";
     }
   },
   methods: {
+    async getProfile() {
+      try {
+        const response = await axios.post(
+            "http://localhost:8000/api/auth/me",
+            {},
+            {
+              headers: {
+                Authorization: `Bearer ${localStorage.getItem("access_token")}`
+              }
+            }
+        );
+        this.userData = response.data;
+      } catch (error) {
+        console.error("Ошибка загрузки профиля:", error);
+      }
+    },
+
     logout() {
-      localStorage.removeItem('access_token')
-      localStorage.removeItem('role')
-      this.token = null
-      this.$router.push('/login')
+      localStorage.removeItem("access_token");
+      localStorage.removeItem("role");
+      this.userData = null;
+      this.$router.push("/login");
     },
 
-    getProfile(){
-      axios.post('http://localhost:8000/api/auth/me', {}, {
-        headers:{
-          'Authorization': `Bearer ${localStorage.getItem('access_token')}`
-        }
-      })
-          .then((response =>{
-            this.userData = response.data
-                console.log("Data: ", this.userData);
-              })
-          )
-    },
     profilePage(id) {
-      this.$router.push(`/profile/:${id}`)
-
+      this.$router.push(`/profile/${id}`);
     }
   },
-  watch:{
-    token(newToken) {
-      if (!newToken) {
-        this.$router.push('/login')
+  watch: {
+    isAuthenticated(newVal) {
+      if (newVal) {
+        this.getProfile();
+      } else {
+        this.userData = null;
       }
     }
   },
   mounted() {
-    this.getProfile()
+    if (this.isAuthenticated) {
+      this.getProfile();
+    }
   }
-}
+};
 </script>
 
 <style scoped>

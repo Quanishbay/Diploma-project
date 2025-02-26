@@ -34,14 +34,6 @@ const router = createRouter({
 });
 
 
-// router.beforeEach((to, from, next) => {
-//     if (to.path === '/cart') {
-//         next()
-//     } else {
-//         next('/login')
-//     }
-//
-// })
 
 
 export default router;
