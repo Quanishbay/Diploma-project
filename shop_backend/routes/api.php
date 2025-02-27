@@ -14,7 +14,7 @@ use App\Http\Controllers\User\RegisterController;
 use Illuminate\Support\Facades\Route;
 
 Route::apiResource('/services', ServiceController::class)->middleware('jwt.auth');
-Route::apiResource('/categories', CategoryController::class)->middleware('jwt.auth');
+Route::get('/categories', [CategoryController::class, 'index']);
 
 Route::post('/services', [ServiceController::class, 'store'])->middleware('jwt.auth');
 Route::get('/services', [ServiceController::class, 'index'])->middleware('jwt.auth');
@@ -42,8 +42,18 @@ Route::get('/history/{user}', [PurchasesHistory::class, 'index'])->middleware('j
 Route::get('/filter-with-name', [FilterServices::class, 'filterServices']);
 
 
-Route::get('/cart-washes', [CarWashController::class, 'index']);
+Route::get('/car-washes', [CarWashController::class, 'index']);
+Route::get('/get-by-category', [CarWashController::class, 'getByCategory']);
 
 
+
+
+Route::group(['prefix' => 'booking'], function ($router) {
+    Route::get('/', [BookingController::class, 'index']);
+    Route::get('/user-bookings', [BookingController::class, 'userBookings'])->middleware('jwt.auth');
+    Route::post('/store', [BookingController::class, 'store'])->middleware('jwt.auth');
+    Route::put('/confirm/{id}', [BookingController::class, 'bookingConfirm'])->middleware('jwt.auth');
+    Route::put('/cancel/{id}', [BookingController::class, 'bookingCancel'])->middleware('jwt.auth');
+});
 
 

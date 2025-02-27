@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\CarWash;
+use App\Models\CategoryCarWash;
 use Illuminate\Http\Request;
 
 class CarWashController extends Controller
@@ -30,8 +31,21 @@ class CarWashController extends Controller
         }
 
 
-
         return CarWash::all();
     }
-}
+
+    public function getByCategory(Request $request)
+    {
+        $categories = explode(',', $request->query('category_id', ''));
+
+        if (empty($categories) || $categories[0] === '') {
+            return CarWash::all();
+        }
+
+        return CategoryCarWash::leftJoin('car_washes', 'car_washes.id', '=', 'category_car_washes.car_wash_id')
+            ->whereIn('category_car_washes.category_id', $categories)
+            ->get();
+    }
+    }
+
 

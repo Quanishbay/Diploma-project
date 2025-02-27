@@ -13,10 +13,10 @@ return new class extends Migration
     {
         Schema::create('bookings', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
-            $table->foreignId('service_id')->constrained('services')->onDelete('cascade');
-            $table->date('date');
-            $table->enum('status', ['pending', 'confirmed', 'completed', 'cancelled'])->default('pending');
+            $table->foreignId('user_id')->constrained()->onDelete('cascade'); // Клиент
+            $table->foreignId('car_wash_id')->constrained()->onDelete('cascade'); // Автомойка
+            $table->dateTime('appointment_time'); // Дата и время брони
+            $table->enum('status', ['pending', 'confirmed', 'canceled'])->default('pending'); // Статус
             $table->timestamps();
         });
     }
