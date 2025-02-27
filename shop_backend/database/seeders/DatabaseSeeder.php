@@ -2,8 +2,6 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
-
 class DatabaseSeeder extends Seeder
 {
     /**
@@ -12,9 +10,8 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         $this->call([
-//            CategorySeeder::class, // Это уже есть
-            ServiceSeeder::class,   // Добавьте этот сидер
-//            UserSeeder::class,   // Добавьте этот сидер
+            CarWashSeeder::class,
+            AppointmentSeeder::class,
         ]);
     }
 }

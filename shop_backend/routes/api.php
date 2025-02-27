@@ -3,6 +3,7 @@
 
 use App\Http\Controllers\Booking\BookingController;
 use App\Http\Controllers\Cart\CartController;
+use App\Http\Controllers\CarWashController;
 use App\Http\Controllers\Category\CategoryController;
 use App\Http\Controllers\FilterServices;
 use App\Http\Controllers\Services\ServiceController;
@@ -37,9 +38,12 @@ Route::group(['middleware' => 'api', 'prefix' => 'auth'], function ($router) {
     Route::post('me', [AuthController::class, 'me']);
 });
 
-
 Route::get('/history/{user}', [PurchasesHistory::class, 'index'])->middleware('jwt.auth');
-
 Route::get('/filter-with-name', [FilterServices::class, 'filterServices']);
+
+
+Route::get('/cart-washes', [CarWashController::class, 'index']);
+
+
 
 
