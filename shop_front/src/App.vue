@@ -2,19 +2,19 @@
   <div class="container mx-auto px-4 py-2">
     <NavigationBar />
     <router-view></router-view>
-    <AboutUs />
+    <WashMap />
   </div>
 </template>
 
 <script>
 
 import NavigationBar from "@/components/Navigation/NavigationBar.vue";
-import AboutUs from "@/components/Navigation/AboutUs.vue";
+import WashMap from "@/components/Map/WashMap.vue";
 
 export default {
   components: {
     NavigationBar,
-    AboutUs
+    WashMap
   }
 };
 </script>
