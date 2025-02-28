@@ -16,23 +16,22 @@ class CarWashController extends Controller
         if ($getID) {
             $carWash = CarWash::find($getID);
             if (!$carWash) {
-                return response()->json('Car wash not found');
+                return response()->json(['message' => 'Car wash not found']);
             }
-            return $carWash;
+            return response()->json($carWash, 200);
         }
-
 
         if ($getName) {
             $carWashNames = CarWash::where('name', 'LIKE', '%' . $getName . '%')->get();
-            if (!$carWashNames) {
-                return response()->json('Car wash not found');
+            if ($carWashNames->isEmpty()) {
+                return response()->json(['message' => 'Car wash not found']);
             }
-            return $carWashNames;
+            return response()->json($carWashNames, 200);
         }
 
-
-        return CarWash::all();
+        return response()->json(CarWash::paginate(10), 200);
     }
+
 
     public function getByCategory(Request $request)
     {
