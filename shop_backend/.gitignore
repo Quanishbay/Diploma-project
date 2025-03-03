@@ -23,6 +23,6 @@ yarn-error.log
 /.zed
 /docker-compose.yml
 /public/*
-/storage/*
-/storage/framework/*
-/storage/logs/*
+/storage/
+/storage/framework/
+/storage/logs/
